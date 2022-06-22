@@ -121,6 +121,11 @@ flutter:
     - assets/rive_animations/
     - assets/pdfs/
 
+- name: firebase-tools
+  uses: joinflux/firebase-tools@v10.7.0
+- name: Firebase Deployment
+  uses: sws2apps/firebase-deployment@v2.0.2
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
