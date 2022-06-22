@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "20255061608",
+    "project_id": "livetv-b6767",
+    "storage_bucket": "livetv-b6767.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20255061608:android:13d67f945bfc518cfd6ddd",
+        "android_client_info": {
+          "package_name": "com.wearelive.livetv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20255061608-ji0sql6s124mj82pbmvgjc2pofapdl8e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wearelive.livetv",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "20255061608-0f4kam0e1og6cevdgoos0n5a2hpqac60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1hJeK05K9wRt4tZkpJRot6nNh8Hu3oO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20255061608-0f4kam0e1og6cevdgoos0n5a2hpqac60.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "20255061608-7f23vbafg8jdvu4gl7rft2jtr8qda3uk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flutterflow.livetv"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
