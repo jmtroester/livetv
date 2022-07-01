@@ -40,8 +40,7 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
       logFirebaseEvent('DailyDevoInfo_Backend-Call');
 
       final activityLogCreateData = createActivityLogRecordData(
-        activity:
-            'User accessed Daily Worship content for ${widget.dateString}',
+        activity: 'Daily Worship > ${widget.dateString}',
         time: getCurrentTimestamp,
         user: currentUserDisplayName,
       );
@@ -105,6 +104,7 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
               );
             },
           );
+          return;
         } else {
           logFirebaseEvent('DailyDevoInfo_Backend-Call');
 
@@ -133,6 +133,7 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
               );
             },
           );
+          return;
         }
       }
     });
@@ -236,18 +237,6 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
                                 'DAILY_DEVO_INFO_PAGE_HOME_BTN_ON_TAP');
                             logFirebaseEvent('Button_Navigate-To');
                             context.pushNamed('Home');
-                            logFirebaseEvent('Button_Backend-Call');
-
-                            final activityLogCreateData =
-                                createActivityLogRecordData(
-                              activity:
-                                  'User clicked on Home button from Daily Worship Screen',
-                              time: getCurrentTimestamp,
-                              user: currentUserDisplayName,
-                            );
-                            await ActivityLogRecord.collection
-                                .doc()
-                                .set(activityLogCreateData);
                           },
                           text: 'Home',
                           options: FFButtonOptions(
@@ -273,18 +262,6 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
                                 'DAILY_DEVO_INFO_PICK_ANOTHER_DATE_BTN_ON');
                             logFirebaseEvent('Button_Navigate-To');
                             context.pushNamed('DailyDevoCal');
-                            logFirebaseEvent('Button_Backend-Call');
-
-                            final activityLogCreateData =
-                                createActivityLogRecordData(
-                              activity:
-                                  'User clicked on Pick a Date button on the Daily Worship screen',
-                              time: getCurrentTimestamp,
-                              user: currentUserDisplayName,
-                            );
-                            await ActivityLogRecord.collection
-                                .doc()
-                                .set(activityLogCreateData);
                           },
                           text: 'Pick Another Date',
                           options: FFButtonOptions(
@@ -362,7 +339,7 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on Daily Bible Verse on Daily Worship Screen for date ${widget.dateString} for verse ${columnDevosRecord.verseReference}',
+                                      'On Daily Worship for ${widget.dateString} clicked verse ${columnDevosRecord.verseReference}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );
@@ -555,25 +532,40 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
                                                       .fromSTEB(12, 0, 12, 0),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 0, 0, 5),
-                                                        child: Text(
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      0, 0, 5),
+                                                          child: Text(
+                                                            columnDevosRecord
+                                                                .possibleQuestion1,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Montserrat',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        Text(
                                                           columnDevosRecord
-                                                              .possibleQuestion1,
-                                                          maxLines: 2,
+                                                              .possibleQuestion2,
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1
@@ -585,24 +577,8 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
                                                                     .primaryText,
                                                               ),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        columnDevosRecord
-                                                            .possibleQuestion2,
-                                                        maxLines: 2,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Montserrat',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryText,
-                                                                ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -651,8 +627,7 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
 
                                       final activityLogCreateData =
                                           createActivityLogRecordData(
-                                        activity:
-                                            'User clicked on help icon for What is a Catechism',
+                                        activity: 'Catechism help',
                                         time: getCurrentTimestamp,
                                         user: currentUserDisplayName,
                                       );
@@ -677,82 +652,147 @@ class _DailyDevoInfoWidgetState extends State<DailyDevoInfoWidget> {
                             shrinkWrap: true,
                             scrollDirection: Axis.vertical,
                             children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 12, 16, 0),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0x230E151B),
-                                          offset: Offset(0, 2),
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          8, 8, 8, 8),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 0, 12, 0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    columnDevosRecord
-                                                        .catechismTitle,
-                                                    maxLines: 2,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .subtitle1,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 4, 0, 4),
-                                                    child: Text(
-                                                      columnDevosRecord
-                                                          .catechismDetails,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                              Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        16, 12, 16, 0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Color(0x230E151B),
+                                              offset: Offset(0, 2),
+                                            )
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  8, 8, 8, 8),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(12, 0, 12, 0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        columnDevosRecord
+                                                            .catechismTitle,
+                                                        maxLines: 2,
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .subtitle1,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0, 4, 0, 4),
+                                                        child: Text(
+                                                          columnDevosRecord
+                                                              .catechismDetails,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
                                                               .bodyText2,
-                                                    ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 4, 0, 0),
+                                      child: FFButtonWidget(
+                                        onPressed: () async {
+                                          logFirebaseEvent(
+                                              'DAILY_DEVO_INFO_VIEW_ALL_CATECHISMS_BTN_');
+                                          logFirebaseEvent(
+                                              'Button_Navigate-To');
+                                          context.pushNamed('AllCatechisms');
+                                          logFirebaseEvent(
+                                              'Button_Backend-Call');
+
+                                          final activityLogCreateData =
+                                              createActivityLogRecordData(
+                                            activity: 'View All Catechisms',
+                                            time: getCurrentTimestamp,
+                                            user: currentUserDisplayName,
+                                          );
+                                          await ActivityLogRecord.collection
+                                              .doc()
+                                              .set(activityLogCreateData);
+                                        },
+                                        text: 'View All Catechisms',
+                                        options: FFButtonOptions(
+                                          width: 170,
+                                          height: 30,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryColor,
+                                          textStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .subtitle2
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                  ),
+                                          elevation: 4,
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1,
+                                          ),
+                                          borderRadius: 4,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                           Padding(
                             padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                                EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
                             child: Text(
                               'Today\'s Prayer Focus',
                               style: FlutterFlowTheme.of(context)

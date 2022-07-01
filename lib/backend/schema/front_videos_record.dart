@@ -32,6 +32,10 @@ abstract class FrontVideosRecord
   String get videoLength;
 
   @nullable
+  @BuiltValueField(wireName: 'url_string')
+  String get urlString;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -40,7 +44,8 @@ abstract class FrontVideosRecord
     ..videoId = 0
     ..videoLink = ''
     ..videoThumbnail = ''
-    ..videoLength = '';
+    ..videoLength = ''
+    ..urlString = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('front_videos');
@@ -69,6 +74,7 @@ Map<String, dynamic> createFrontVideosRecordData({
   String videoLink,
   String videoThumbnail,
   String videoLength,
+  String urlString,
 }) =>
     serializers.toFirestore(
         FrontVideosRecord.serializer,
@@ -77,4 +83,5 @@ Map<String, dynamic> createFrontVideosRecordData({
           ..videoId = videoId
           ..videoLink = videoLink
           ..videoThumbnail = videoThumbnail
-          ..videoLength = videoLength));
+          ..videoLength = videoLength
+          ..urlString = urlString));

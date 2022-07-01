@@ -20,12 +20,16 @@ class VideoPageWidget extends StatefulWidget {
     this.videoName,
     this.audioLink,
     this.videoThumbnail,
+    this.audioID,
+    this.videoURL,
   }) : super(key: key);
 
   final String videoLink;
   final String videoName;
   final String audioLink;
   final String videoThumbnail;
+  final int audioID;
+  final String videoURL;
 
   @override
   _VideoPageWidgetState createState() => _VideoPageWidgetState();
@@ -205,20 +209,28 @@ class _VideoPageWidgetState extends State<VideoPageWidget> {
                                 onPressed: () async {
                                   logFirebaseEvent(
                                       'VIDEO_LISTEN_TO_AUDIO_BTN_ON_TAP');
-                                  logFirebaseEvent('Button_Launch-U-R-L');
-                                  await launchURL(widget.audioLink);
+                                  logFirebaseEvent('Button_Backend-Call');
+
+                                  final usersUpdateData = {
+                                    'podcasts_watched':
+                                        FieldValue.arrayUnion([widget.audioID]),
+                                  };
+                                  await currentUserReference
+                                      .update(usersUpdateData);
                                   logFirebaseEvent('Button_Backend-Call');
 
                                   final activityLogCreateData =
                                       createActivityLogRecordData(
                                     activity:
-                                        'User clicked on Listen to Audio Button on the video screen for: ${widget.videoName}',
+                                        'Listened to Audio from Video Screen - ${widget.videoName}',
                                     time: getCurrentTimestamp,
                                     user: currentUserDisplayName,
                                   );
                                   await ActivityLogRecord.collection
                                       .doc()
                                       .set(activityLogCreateData);
+                                  logFirebaseEvent('Button_Launch-U-R-L');
+                                  await launchURL(widget.audioLink);
                                 },
                                 text: 'Listen to Audio',
                                 icon: Icon(
@@ -269,7 +281,7 @@ class _VideoPageWidgetState extends State<VideoPageWidget> {
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on share button on Video Page for: ${widget.videoName}',
+                                      'Video shared - ${widget.videoName}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );
@@ -277,8 +289,7 @@ class _VideoPageWidgetState extends State<VideoPageWidget> {
                                     .doc()
                                     .set(activityLogCreateData);
                                 logFirebaseEvent('Button_Share');
-                                await Share.share(
-                                    'livetv://churchhome.online${GoRouter.of(context).location}');
+                                await Share.share(widget.videoURL);
                               },
                               text: 'Share This',
                               icon: Icon(
@@ -328,7 +339,7 @@ class _VideoPageWidgetState extends State<VideoPageWidget> {
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on Post This button on Video Page from: ${widget.videoName}',
+                                      'Posting video to social - ${widget.videoName}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );
@@ -402,7 +413,7 @@ class _VideoPageWidgetState extends State<VideoPageWidget> {
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on Remind Me Later Button on video screen for: ${widget.videoName}',
+                                      'Remind me later - ${widget.videoName}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );

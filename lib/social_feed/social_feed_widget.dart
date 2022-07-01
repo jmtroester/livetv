@@ -32,7 +32,7 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
       logFirebaseEvent('socialFeed_Backend-Call');
 
       final activityLogCreateData = createActivityLogRecordData(
-        activity: 'User opened the main social feed',
+        activity: 'Main social feed',
         time: getCurrentTimestamp,
         user: currentUserDisplayName,
       );
@@ -388,7 +388,7 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
                                                           final activityLogCreateData =
                                                               createActivityLogRecordData(
                                                             activity:
-                                                                'User deleted social post from ${dateTimeFormat('M/d h:mm a', socialFeedSocialPostsRecord.postedTime)} that said ${socialFeedSocialPostsRecord.content}',
+                                                                'Deleted: ${dateTimeFormat('M/d h:mm a', socialFeedSocialPostsRecord.postedTime)} that said ${socialFeedSocialPostsRecord.content}',
                                                             time:
                                                                 getCurrentTimestamp,
                                                             user:
@@ -415,7 +415,7 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
                                                           final activityLogCreateData =
                                                               createActivityLogRecordData(
                                                             activity:
-                                                                'User clicked on delete icon for social post from ${dateTimeFormat('M/d H:mm', socialFeedSocialPostsRecord.postedTime)} but decided not to follow through',
+                                                                'User deleted: ${dateTimeFormat('M/d H:mm', socialFeedSocialPostsRecord.postedTime)} but decided not to follow through',
                                                             time:
                                                                 getCurrentTimestamp,
                                                             user:
@@ -588,7 +588,7 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
                                                         socialFeedSocialPostsRecord
                                                             .photo,
                                                         width: double.infinity,
-                                                        height: 300,
+                                                        height: 200,
                                                         fit: BoxFit.cover,
                                                       ),
                                                     ),

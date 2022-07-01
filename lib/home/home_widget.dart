@@ -1,6 +1,7 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../components/end_drawer_widget.dart';
+import '../components/home_header_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -24,21 +25,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     'containerOnPageLoadAnimation1': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, -100),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'containerOnPageLoadAnimation2': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -51,9 +38,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         opacity: 1,
       ),
     ),
-    'containerOnPageLoadAnimation3': AnimationInfo(
+    'containerOnPageLoadAnimation2': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(100, 0),
@@ -66,9 +54,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         opacity: 1,
       ),
     ),
-    'containerOnPageLoadAnimation4': AnimationInfo(
+    'containerOnPageLoadAnimation3': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -84,6 +73,23 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     'containerOnActionTriggerAnimation': AnimationInfo(
       trigger: AnimationTrigger.onActionTrigger,
       duration: 600,
+      hideBeforeAnimating: false,
+      fadeIn: true,
+      initialState: AnimationState(
+        offset: Offset(100, 0),
+        scale: 1,
+        opacity: 0,
+      ),
+      finalState: AnimationState(
+        offset: Offset(0, 0),
+        scale: 1,
+        opacity: 1,
+      ),
+    ),
+    'containerOnPageLoadAnimation4': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(100, 0),
@@ -99,21 +105,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     'containerOnPageLoadAnimation5': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(100, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'containerOnPageLoadAnimation6': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -143,13 +135,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         user: currentUserDisplayName,
         android: isAndroid,
         ios: isiOS,
-        appVersion: '3.4.6',
+        appVersion: '3.4.7',
       );
       await ActivityLogRecord.collection.doc().set(activityLogCreateData);
       logFirebaseEvent('Home_Backend-Call');
 
       final usersUpdateData = createUsersRecordData(
-        appVersion: '3.4.6',
+        appVersion: '3.4.7',
         lastLogin: getCurrentTimestamp,
       );
       await currentUserReference.update(usersUpdateData);
@@ -240,68 +232,12 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
           return Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      logFirebaseEvent('HOME_PAGE_Container_89kqwfs8_ON_TAP');
-                      logFirebaseEvent('Container_Launch-U-R-L');
-                      await launchURL(mainContainerMiscRecord.homeImageLink);
-                      logFirebaseEvent('Container_Backend-Call');
-
-                      final activityLogCreateData = createActivityLogRecordData(
-                        activity:
-                            'User click on home page banner to view video: ${mainContainerMiscRecord.homeText}',
-                        time: getCurrentTimestamp,
-                        user: currentUserDisplayName,
-                      );
-                      await ActivityLogRecord.collection
-                          .doc()
-                          .set(activityLogCreateData);
-                    },
-                    child: Material(
-                      color: Colors.transparent,
-                      elevation: 4,
-                      child: Container(
-                        width: double.infinity,
-                        height: 180,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFEEEEEE),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.network(
-                              mainContainerMiscRecord.homeImage,
-                            ).image,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ).animated([animationsMap['containerOnPageLoadAnimation1']]),
-                ],
-              ),
+              HomeHeaderWidget(),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
                   scrollDirection: Axis.vertical,
                   children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AuthUserStreamWidget(
-                            child: Text(
-                              'Hello ${currentUserDisplayName}!',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context).title1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
                       child: AuthUserStreamWidget(
@@ -354,8 +290,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
-                                  activity:
-                                      'User clicked on Daily Worship button on Home Screen',
+                                  activity: 'Home > Daily Worship',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );
@@ -468,133 +403,162 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                 ),
                               ),
                             ).animated([
-                              animationsMap['containerOnPageLoadAnimation2']
+                              animationsMap['containerOnPageLoadAnimation1']
                             ]),
                           ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 5),
-                      child: InkWell(
-                        onTap: () async {
-                          logFirebaseEvent('HOME_PAGE_ContainerPhotoBG_ON_TAP');
-                          logFirebaseEvent('ContainerPhotoBG_Navigate-To');
-                          context.pushNamed('SermonNav');
-                          logFirebaseEvent('ContainerPhotoBG_Backend-Call');
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                      child: Badge(
+                        badgeContent: Text(
+                          '1',
+                          style:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        showBadge: false,
+                        shape: BadgeShape.circle,
+                        badgeColor: FlutterFlowTheme.of(context).primaryColor,
+                        elevation: 4,
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                        position: BadgePosition.topEnd(),
+                        animationType: BadgeAnimationType.scale,
+                        toAnimate: true,
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 5),
+                          child: InkWell(
+                            onTap: () async {
+                              logFirebaseEvent(
+                                  'HOME_PAGE_ContainerPhotoBG_ON_TAP');
+                              logFirebaseEvent('ContainerPhotoBG_Navigate-To');
+                              context.pushNamed('SermonNav');
+                              logFirebaseEvent('ContainerPhotoBG_Backend-Call');
 
-                          final activityLogCreateData =
-                              createActivityLogRecordData(
-                            activity:
-                                'User clicked on Sermon Content button on Home Screen',
-                            time: getCurrentTimestamp,
-                            user: currentUserDisplayName,
-                          );
-                          await ActivityLogRecord.collection
-                              .doc()
-                              .set(activityLogCreateData);
-                        },
-                        child: Material(
-                          color: Colors.transparent,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              image: DecorationImage(
-                                fit: BoxFit.fitWidth,
-                                image: Image.asset(
-                                  'assets/images/Crystal_Edge_Tech_-_16x9.jpg',
-                                ).image,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 3,
-                                  color: Color(0x33000000),
-                                  offset: Offset(0, 2),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Container(
-                              width: 100,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Color(0x9A000000),
+                              final activityLogCreateData =
+                                  createActivityLogRecordData(
+                                activity: 'Home > Sermon Content',
+                                time: getCurrentTimestamp,
+                                user: currentUserDisplayName,
+                              );
+                              await ActivityLogRecord.collection
+                                  .doc()
+                                  .set(activityLogCreateData);
+                            },
+                            child: Material(
+                              color: Colors.transparent,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 10, 16, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              'Sermon Content',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .title1
-                                                  .override(
-                                                    fontFamily: 'Lexend Deca',
-                                                    color: Colors.white,
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.chevron_right_rounded,
-                                            color: Colors.white,
-                                            size: 24,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 4, 16, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              'Full and Mini Sermons and other content',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily: 'Lexend Deca',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBtnText,
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                              child: Container(
+                                width: double.infinity,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    fit: BoxFit.fitWidth,
+                                    image: Image.asset(
+                                      'assets/images/Crystal_Edge_Tech_-_16x9.jpg',
+                                    ).image,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 3,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 2),
+                                    )
                                   ],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Container(
+                                  width: 100,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Color(0x9A000000),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 0, 2),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16, 10, 16, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'Sermon Content',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .title1
+                                                      .override(
+                                                        fontFamily:
+                                                            'Lexend Deca',
+                                                        color: Colors.white,
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.chevron_right_rounded,
+                                                color: Colors.white,
+                                                size: 24,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16, 4, 16, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'Full and Mini Sermons and other content',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily:
+                                                            'Lexend Deca',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryBtnText,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ).animated(
+                              [animationsMap['containerOnPageLoadAnimation2']]),
                         ),
-                      ).animated(
-                          [animationsMap['containerOnPageLoadAnimation3']]),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 5),
@@ -607,8 +571,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
                           final activityLogCreateData =
                               createActivityLogRecordData(
-                            activity:
-                                'User clicked on Bible button on Home Screen',
+                            activity: 'Home > Bible',
                             time: getCurrentTimestamp,
                             user: currentUserDisplayName,
                           );
@@ -716,7 +679,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           ),
                         ),
                       ).animated(
-                          [animationsMap['containerOnPageLoadAnimation4']]),
+                          [animationsMap['containerOnPageLoadAnimation3']]),
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 5),
@@ -729,8 +692,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
                           final activityLogCreateData =
                               createActivityLogRecordData(
-                            activity:
-                                'User clicked on Chat button on Home Screen',
+                            activity: 'Home > Chat',
                             time: getCurrentTimestamp,
                             user: currentUserDisplayName,
                           );
@@ -839,7 +801,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                         ),
                       ).animated([
                         animationsMap['containerOnActionTriggerAnimation'],
-                        animationsMap['containerOnPageLoadAnimation5']
+                        animationsMap['containerOnPageLoadAnimation4']
                       ]),
                     ),
                     Padding(
@@ -849,6 +811,17 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           logFirebaseEvent('HOME_PAGE_ContainerPhotoBG_ON_TAP');
                           logFirebaseEvent('ContainerPhotoBG_Navigate-To');
                           context.pushNamed('socialFeed');
+                          logFirebaseEvent('ContainerPhotoBG_Backend-Call');
+
+                          final activityLogCreateData =
+                              createActivityLogRecordData(
+                            activity: 'Home > Social Content',
+                            time: getCurrentTimestamp,
+                            user: currentUserDisplayName,
+                          );
+                          await ActivityLogRecord.collection
+                              .doc()
+                              .set(activityLogCreateData);
                         },
                         child: Material(
                           color: Colors.transparent,
@@ -950,7 +923,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           ),
                         ),
                       ).animated(
-                          [animationsMap['containerOnPageLoadAnimation6']]),
+                          [animationsMap['containerOnPageLoadAnimation5']]),
                     ),
                   ],
                 ),

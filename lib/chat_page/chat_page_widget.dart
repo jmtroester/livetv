@@ -133,17 +133,6 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                       'chat': _chatInfo.chatRecord,
                     },
                   );
-                  logFirebaseEvent('Icon_Backend-Call');
-
-                  final activityLogCreateData = createActivityLogRecordData(
-                    activity:
-                        'User clicked on button to add someone to their chat',
-                    time: getCurrentTimestamp,
-                    user: currentUserDisplayName,
-                  );
-                  await ActivityLogRecord.collection
-                      .doc()
-                      .set(activityLogCreateData);
                 },
                 child: Icon(
                   Icons.person_add,

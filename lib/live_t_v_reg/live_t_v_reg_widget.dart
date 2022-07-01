@@ -438,10 +438,19 @@ class _LiveTVRegWidgetState extends State<LiveTVRegWidget> {
                                 return;
                               }
 
-                              final usersCreateData = createUsersRecordData(
-                                displayName: nameFieldController.text,
-                                phoneNumber: phoneFieldController.text,
-                              );
+                              final usersCreateData = {
+                                ...createUsersRecordData(
+                                  displayName: nameFieldController.text,
+                                  phoneNumber: phoneFieldController.text,
+                                  lastLogin: getCurrentTimestamp,
+                                  points: 0,
+                                  levelId: 1,
+                                ),
+                                'sermons_watched': [0],
+                                'podcasts_watched': [0],
+                                'shorts_watched': [0],
+                                'non_sermon_podcasts_watched': [0],
+                              };
                               await UsersRecord.collection
                                   .doc(user.uid)
                                   .update(usersCreateData);

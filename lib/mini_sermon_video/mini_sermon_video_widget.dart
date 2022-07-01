@@ -23,6 +23,7 @@ class _MiniSermonVideoWidgetState extends State<MiniSermonVideoWidget>
     'containerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 800,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(50, 0),
@@ -171,6 +172,9 @@ class _MiniSermonVideoWidgetState extends State<MiniSermonVideoWidget>
                                     'videoName': serializeParam(
                                         listViewFrontVideosRecord.videoName,
                                         ParamType.String),
+                                    'videoURL': serializeParam(
+                                        listViewFrontVideosRecord.urlString,
+                                        ParamType.String),
                                   }.withoutNulls,
                                 );
                                 logFirebaseEvent('videoCard_Backend-Call');
@@ -186,7 +190,7 @@ class _MiniSermonVideoWidgetState extends State<MiniSermonVideoWidget>
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on Mini Sermon ${listViewFrontVideosRecord.videoName} to view on the Video Screen',
+                                      'Mini-Sermon - ${listViewFrontVideosRecord.videoName}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );

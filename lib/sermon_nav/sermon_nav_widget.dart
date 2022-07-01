@@ -4,6 +4,7 @@ import '../components/end_drawer_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -22,6 +23,7 @@ class _SermonNavWidgetState extends State<SermonNavWidget>
     'columnOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -37,6 +39,7 @@ class _SermonNavWidgetState extends State<SermonNavWidget>
     'containerOnPageLoadAnimation1': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -52,6 +55,7 @@ class _SermonNavWidgetState extends State<SermonNavWidget>
     'containerOnPageLoadAnimation2': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(100, 0),
@@ -67,6 +71,7 @@ class _SermonNavWidgetState extends State<SermonNavWidget>
     'containerOnPageLoadAnimation3': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -82,6 +87,7 @@ class _SermonNavWidgetState extends State<SermonNavWidget>
     'containerOnPageLoadAnimation4': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(100, 0),
@@ -193,479 +199,769 @@ class _SermonNavWidgetState extends State<SermonNavWidget>
             ],
           ).animated([animationsMap['columnOnPageLoadAnimation']]),
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              scrollDirection: Axis.vertical,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 5),
-                  child: InkWell(
-                    onTap: () async {
-                      logFirebaseEvent(
-                          'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
-                      logFirebaseEvent('ContainerPhotoBG_Navigate-To');
-                      context.pushNamed('FullSermonVideos');
-                      logFirebaseEvent('ContainerPhotoBG_Backend-Call');
-
-                      final activityLogCreateData = createActivityLogRecordData(
-                        activity:
-                            'User clicked on Full Sermons button on Sermons Navigation Screen',
-                        time: getCurrentTimestamp,
-                        user: currentUserDisplayName,
-                      );
-                      await ActivityLogRecord.collection
-                          .doc()
-                          .set(activityLogCreateData);
-                    },
-                    child: Material(
-                      color: Colors.transparent,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          image: DecorationImage(
-                            fit: BoxFit.fitWidth,
-                            image: Image.asset(
-                              'assets/images/King_Of_Kings_14_-_16x9.jpg',
-                            ).image,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 3,
-                              color: Color(0x33000000),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.vertical,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                    child: AuthUserStreamWidget(
+                      child: StreamBuilder<List<SermonVideosRecord>>(
+                        stream: querySermonVideosRecord(
+                          queryBuilder: (sermonVideosRecord) =>
+                              sermonVideosRecord.where('video_id',
+                                  whereNotIn: (currentUserDocument
+                                          ?.sermonsWatched
+                                          ?.toList() ??
+                                      [])),
                         ),
-                        child: Container(
-                          width: 100,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color(0x9A000000),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 10, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Full Sermons',
-                                          style: FlutterFlowTheme.of(context)
-                                              .title1
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Colors.white,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: Colors.white,
-                                        size: 24,
-                                      ),
-                                    ],
-                                  ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: SpinKitWave(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  size: 50,
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 4, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Full sermon videos (30-60 mins)',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBtnText,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                            );
+                          }
+                          List<SermonVideosRecord> badgeSermonVideosRecordList =
+                              snapshot.data;
+                          return Badge(
+                            badgeContent: Text(
+                              badgeSermonVideosRecordList.length.toString(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                              ],
                             ),
-                          ),
-                        ),
+                            showBadge:
+                                (badgeSermonVideosRecordList.length) != 0,
+                            shape: BadgeShape.circle,
+                            badgeColor:
+                                FlutterFlowTheme.of(context).primaryColor,
+                            elevation: 4,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                            position: BadgePosition.topEnd(),
+                            animationType: BadgeAnimationType.scale,
+                            toAnimate: true,
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 5),
+                              child: InkWell(
+                                onTap: () async {
+                                  logFirebaseEvent(
+                                      'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Navigate-To');
+                                  context.pushNamed('FullSermonVideos');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Backend-Call');
+
+                                  final activityLogCreateData =
+                                      createActivityLogRecordData(
+                                    activity:
+                                        'Home > Sermon Content > Full Sermons',
+                                    time: getCurrentTimestamp,
+                                    user: currentUserDisplayName,
+                                  );
+                                  await ActivityLogRecord.collection
+                                      .doc()
+                                      .set(activityLogCreateData);
+                                },
+                                child: Material(
+                                  color: Colors.transparent,
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fitWidth,
+                                        image: Image.asset(
+                                          'assets/images/King_Of_Kings_14_-_16x9.jpg',
+                                        ).image,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 3,
+                                          color: Color(0x33000000),
+                                          offset: Offset(0, 2),
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Container(
+                                      width: 100,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x9A000000),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 2),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 10, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Full Sermons',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .title1
+                                                          .override(
+                                                            fontFamily:
+                                                                'Lexend Deca',
+                                                            color: Colors.white,
+                                                            fontSize: 24,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.chevron_right_rounded,
+                                                    color: Colors.white,
+                                                    size: 24,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 4, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Full sermon videos (30-60 mins)',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Lexend Deca',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBtnText,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ).animated([
+                                animationsMap['containerOnPageLoadAnimation1']
+                              ]),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ).animated([animationsMap['containerOnPageLoadAnimation1']]),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 5),
-                  child: InkWell(
-                    onTap: () async {
-                      logFirebaseEvent(
-                          'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
-                      logFirebaseEvent('ContainerPhotoBG_Navigate-To');
-                      context.pushNamed('MiniSermonVideo');
-                      logFirebaseEvent('ContainerPhotoBG_Backend-Call');
-
-                      final activityLogCreateData = createActivityLogRecordData(
-                        activity:
-                            'User clicked on Mini Sermons button on Sermons Navigation Screen',
-                        time: getCurrentTimestamp,
-                        user: currentUserDisplayName,
-                      );
-                      await ActivityLogRecord.collection
-                          .doc()
-                          .set(activityLogCreateData);
-                    },
-                    child: Material(
-                      color: Colors.transparent,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          image: DecorationImage(
-                            fit: BoxFit.fitWidth,
-                            image: Image.asset(
-                              'assets/images/King_Of_Kings_13_-_16x9.jpg',
-                            ).image,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 3,
-                              color: Color(0x33000000),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(8),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                    child: AuthUserStreamWidget(
+                      child: StreamBuilder<List<FrontVideosRecord>>(
+                        stream: queryFrontVideosRecord(
+                          queryBuilder: (frontVideosRecord) =>
+                              frontVideosRecord.where('video_id',
+                                  whereNotIn: (currentUserDocument
+                                          ?.shortsWatched
+                                          ?.toList() ??
+                                      [])),
                         ),
-                        child: Container(
-                          width: 100,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color(0x9A000000),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 10, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Mini Sermons',
-                                          style: FlutterFlowTheme.of(context)
-                                              .title1
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Colors.white,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: Colors.white,
-                                        size: 24,
-                                      ),
-                                    ],
-                                  ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: SpinKitWave(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  size: 50,
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 4, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Mini sermon videos (2-8 mins)',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBtnText,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                            );
+                          }
+                          List<FrontVideosRecord> badgeFrontVideosRecordList =
+                              snapshot.data;
+                          return Badge(
+                            badgeContent: Text(
+                              badgeFrontVideosRecordList.length.toString(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                              ],
                             ),
-                          ),
-                        ),
+                            showBadge: (badgeFrontVideosRecordList.length) != 0,
+                            shape: BadgeShape.circle,
+                            badgeColor:
+                                FlutterFlowTheme.of(context).primaryColor,
+                            elevation: 4,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                            position: BadgePosition.topEnd(),
+                            animationType: BadgeAnimationType.scale,
+                            toAnimate: true,
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 5),
+                              child: InkWell(
+                                onTap: () async {
+                                  logFirebaseEvent(
+                                      'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Navigate-To');
+                                  context.pushNamed('MiniSermonVideo');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Backend-Call');
+
+                                  final activityLogCreateData =
+                                      createActivityLogRecordData(
+                                    activity:
+                                        'Home > Sermon Content> Mini Sermons',
+                                    time: getCurrentTimestamp,
+                                    user: currentUserDisplayName,
+                                  );
+                                  await ActivityLogRecord.collection
+                                      .doc()
+                                      .set(activityLogCreateData);
+                                },
+                                child: Material(
+                                  color: Colors.transparent,
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fitWidth,
+                                        image: Image.asset(
+                                          'assets/images/King_Of_Kings_13_-_16x9.jpg',
+                                        ).image,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 3,
+                                          color: Color(0x33000000),
+                                          offset: Offset(0, 2),
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Container(
+                                      width: 100,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x9A000000),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 2),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 10, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Mini Sermons',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .title1
+                                                          .override(
+                                                            fontFamily:
+                                                                'Lexend Deca',
+                                                            color: Colors.white,
+                                                            fontSize: 24,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.chevron_right_rounded,
+                                                    color: Colors.white,
+                                                    size: 24,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 4, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Mini sermon videos (2-8 mins)',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Lexend Deca',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBtnText,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ).animated([
+                                animationsMap['containerOnPageLoadAnimation2']
+                              ]),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ).animated([animationsMap['containerOnPageLoadAnimation2']]),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 5),
-                  child: InkWell(
-                    onTap: () async {
-                      logFirebaseEvent(
-                          'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
-                      logFirebaseEvent('ContainerPhotoBG_Navigate-To');
-                      context.pushNamed('AudioSermons');
-                      logFirebaseEvent('ContainerPhotoBG_Backend-Call');
-
-                      final activityLogCreateData = createActivityLogRecordData(
-                        activity:
-                            'User clicked on Audio Sermons button on Sermons Navigation Screen',
-                        time: getCurrentTimestamp,
-                        user: currentUserDisplayName,
-                      );
-                      await ActivityLogRecord.collection
-                          .doc()
-                          .set(activityLogCreateData);
-                    },
-                    child: Material(
-                      color: Colors.transparent,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          image: DecorationImage(
-                            fit: BoxFit.fitWidth,
-                            image: Image.asset(
-                              'assets/images/King_Of_Kings_12_-_16x9.jpg',
-                            ).image,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 3,
-                              color: Color(0x33000000),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(8),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                    child: AuthUserStreamWidget(
+                      child: StreamBuilder<List<SermonVideosRecord>>(
+                        stream: querySermonVideosRecord(
+                          queryBuilder: (sermonVideosRecord) =>
+                              sermonVideosRecord.where('audio_id',
+                                  whereNotIn: (currentUserDocument
+                                          ?.podcastsWatched
+                                          ?.toList() ??
+                                      [])),
                         ),
-                        child: Container(
-                          width: 100,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color(0x9A000000),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 10, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Audio Sermons',
-                                          style: FlutterFlowTheme.of(context)
-                                              .title1
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Colors.white,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: Colors.white,
-                                        size: 24,
-                                      ),
-                                    ],
-                                  ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: SpinKitWave(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  size: 50,
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 4, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Full Sermons on audio',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBtnText,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                            );
+                          }
+                          List<SermonVideosRecord> badgeSermonVideosRecordList =
+                              snapshot.data;
+                          return Badge(
+                            badgeContent: Text(
+                              badgeSermonVideosRecordList.length.toString(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                              ],
                             ),
-                          ),
-                        ),
+                            showBadge:
+                                (badgeSermonVideosRecordList.length) != 0,
+                            shape: BadgeShape.circle,
+                            badgeColor:
+                                FlutterFlowTheme.of(context).primaryColor,
+                            elevation: 4,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                            position: BadgePosition.topEnd(),
+                            animationType: BadgeAnimationType.scale,
+                            toAnimate: true,
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 5),
+                              child: InkWell(
+                                onTap: () async {
+                                  logFirebaseEvent(
+                                      'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Navigate-To');
+                                  context.pushNamed('AudioSermons');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Backend-Call');
+
+                                  final activityLogCreateData =
+                                      createActivityLogRecordData(
+                                    activity:
+                                        'Home > Sermon Content> Audio Sermons',
+                                    time: getCurrentTimestamp,
+                                    user: currentUserDisplayName,
+                                  );
+                                  await ActivityLogRecord.collection
+                                      .doc()
+                                      .set(activityLogCreateData);
+                                },
+                                child: Material(
+                                  color: Colors.transparent,
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fitWidth,
+                                        image: Image.asset(
+                                          'assets/images/King_Of_Kings_12_-_16x9.jpg',
+                                        ).image,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 3,
+                                          color: Color(0x33000000),
+                                          offset: Offset(0, 2),
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Container(
+                                      width: 100,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x9A000000),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 2),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 10, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Audio Sermons',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .title1
+                                                          .override(
+                                                            fontFamily:
+                                                                'Lexend Deca',
+                                                            color: Colors.white,
+                                                            fontSize: 24,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.chevron_right_rounded,
+                                                    color: Colors.white,
+                                                    size: 24,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 4, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Full Sermons on audio',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Lexend Deca',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBtnText,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ).animated([
+                                animationsMap['containerOnPageLoadAnimation3']
+                              ]),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ).animated([animationsMap['containerOnPageLoadAnimation3']]),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 5),
-                  child: InkWell(
-                    onTap: () async {
-                      logFirebaseEvent(
-                          'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
-                      logFirebaseEvent('ContainerPhotoBG_Navigate-To');
-                      context.pushNamed('AudioPodcast');
-                      logFirebaseEvent('ContainerPhotoBG_Backend-Call');
-
-                      final activityLogCreateData = createActivityLogRecordData(
-                        activity:
-                            'User clicked on Podcasts button on Sermons Navigation Screen',
-                        time: getCurrentTimestamp,
-                        user: currentUserDisplayName,
-                      );
-                      await ActivityLogRecord.collection
-                          .doc()
-                          .set(activityLogCreateData);
-                    },
-                    child: Material(
-                      color: Colors.transparent,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          image: DecorationImage(
-                            fit: BoxFit.fitWidth,
-                            image: Image.asset(
-                              'assets/images/King_Of_Kings_10_-_16x9.jpg',
-                            ).image,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 3,
-                              color: Color(0x33000000),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(8),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                    child: AuthUserStreamWidget(
+                      child: StreamBuilder<List<NonSermonPodcastRecord>>(
+                        stream: queryNonSermonPodcastRecord(
+                          queryBuilder: (nonSermonPodcastRecord) =>
+                              nonSermonPodcastRecord.where('podcast_id',
+                                  whereNotIn: (currentUserDocument
+                                          ?.nonSermonPodcastsWatched
+                                          ?.toList() ??
+                                      [])),
                         ),
-                        child: Container(
-                          width: 100,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color(0x9A000000),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 10, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'The Church that had to Die',
-                                          style: FlutterFlowTheme.of(context)
-                                              .title1
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Colors.white,
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: Colors.white,
-                                        size: 24,
-                                      ),
-                                    ],
-                                  ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: SpinKitWave(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  size: 50,
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 4, 16, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Listen to an exclusive LiveTV podcast',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBtnText,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                            );
+                          }
+                          List<NonSermonPodcastRecord>
+                              badgeNonSermonPodcastRecordList = snapshot.data;
+                          return Badge(
+                            badgeContent: Text(
+                              badgeNonSermonPodcastRecordList.length.toString(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                              ],
                             ),
-                          ),
-                        ),
+                            showBadge:
+                                (badgeNonSermonPodcastRecordList.length) != 0,
+                            shape: BadgeShape.circle,
+                            badgeColor:
+                                FlutterFlowTheme.of(context).primaryColor,
+                            elevation: 4,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                            position: BadgePosition.topEnd(),
+                            animationType: BadgeAnimationType.scale,
+                            toAnimate: true,
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 5),
+                              child: InkWell(
+                                onTap: () async {
+                                  logFirebaseEvent(
+                                      'SERMON_NAV_PAGE_ContainerPhotoBG_ON_TAP');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Navigate-To');
+                                  context.pushNamed('AudioPodcast');
+                                  logFirebaseEvent(
+                                      'ContainerPhotoBG_Backend-Call');
+
+                                  final activityLogCreateData =
+                                      createActivityLogRecordData(
+                                    activity:
+                                        'Home > Sermon Content> Church that had to Die',
+                                    time: getCurrentTimestamp,
+                                    user: currentUserDisplayName,
+                                  );
+                                  await ActivityLogRecord.collection
+                                      .doc()
+                                      .set(activityLogCreateData);
+                                },
+                                child: Material(
+                                  color: Colors.transparent,
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fitWidth,
+                                        image: Image.asset(
+                                          'assets/images/King_Of_Kings_10_-_16x9.jpg',
+                                        ).image,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 3,
+                                          color: Color(0x33000000),
+                                          offset: Offset(0, 2),
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Container(
+                                      width: 100,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x9A000000),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 2),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 10, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'The Church that had to Die',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .title1
+                                                          .override(
+                                                            fontFamily:
+                                                                'Lexend Deca',
+                                                            color: Colors.white,
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.chevron_right_rounded,
+                                                    color: Colors.white,
+                                                    size: 24,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 4, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Listen to an exclusive LiveTV podcast',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Lexend Deca',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBtnText,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ).animated([
+                                animationsMap['containerOnPageLoadAnimation4']
+                              ]),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ).animated([animationsMap['containerOnPageLoadAnimation4']]),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

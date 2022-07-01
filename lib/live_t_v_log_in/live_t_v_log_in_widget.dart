@@ -53,7 +53,7 @@ class _LiveTVLogInWidgetState extends State<LiveTVLogInWidget> {
                             'assets/images/AppIcon_dark.jpg',
                             width: 300,
                             height: 120,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                       ),

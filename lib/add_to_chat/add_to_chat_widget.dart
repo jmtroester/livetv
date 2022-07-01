@@ -329,7 +329,7 @@ class _AddToChatWidgetState extends State<AddToChatWidget> {
 
                   final activityLogCreateData = createActivityLogRecordData(
                     activity:
-                        'User added someone to their group chat: ${widget.chat.users.toList().length.toString()}',
+                        'Added someone to chat${widget.chat.users.toList().length.toString()}',
                     time: getCurrentTimestamp,
                     user: currentUserDisplayName,
                   );
