@@ -142,3 +142,43 @@ class GetBibleVerseNumbersCall {
         r'''$.data[:].id''',
       );
 }
+
+class FullSermonsCall {
+  static Future<ApiCallResponse> call() {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Full Sermons',
+      apiUrl: 'https://api.flotiq.com/api/v1/content/livetv_app',
+      callType: ApiCallType.GET,
+      headers: {
+        'X-AUTH-TOKEN': '8a014de7689639834d2fe0b256433523',
+      },
+      params: {},
+      returnBody: true,
+    );
+  }
+
+  static dynamic videoID(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].sermon_thumbnail[:].dataUrl''',
+      );
+  static dynamic text(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].text''',
+      );
+  static dynamic audioLink(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].audio_link''',
+      );
+  static dynamic videoLink(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].video_link''',
+      );
+  static dynamic sermonName(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].sermon_name''',
+      );
+  static dynamic sermonThumbnail(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].sermon_thumbnail[:].dataUrl''',
+      );
+}

@@ -24,6 +24,7 @@ class _AudioPodcastWidgetState extends State<AudioPodcastWidget>
     'listViewOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -39,6 +40,7 @@ class _AudioPodcastWidgetState extends State<AudioPodcastWidget>
     'listViewOnActionTriggerAnimation': AnimationInfo(
       trigger: AnimationTrigger.onActionTrigger,
       duration: 600,
+      hideBeforeAnimating: false,
       initialState: AnimationState(
         offset: Offset(0, 0),
         scale: 1,
@@ -53,6 +55,7 @@ class _AudioPodcastWidgetState extends State<AudioPodcastWidget>
     'containerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 800,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(50, 0),
@@ -180,12 +183,12 @@ class _AudioPodcastWidgetState extends State<AudioPodcastWidget>
                                       fontSize: 10,
                                     ),
                           ),
-                          showBadge: (currentUserDocument
+                          showBadge: !((currentUserDocument
                                       ?.nonSermonPodcastsWatched
                                       ?.toList() ??
                                   [])
                               .contains(
-                                  listViewNonSermonPodcastRecord.podcastId),
+                                  listViewNonSermonPodcastRecord.podcastId)),
                           shape: BadgeShape.circle,
                           badgeColor: FlutterFlowTheme.of(context).primaryColor,
                           elevation: 4,
@@ -217,7 +220,7 @@ class _AudioPodcastWidgetState extends State<AudioPodcastWidget>
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on the non sermon podcast ${listViewNonSermonPodcastRecord.podcastName} to view it on the podcast page',
+                                      'The Church that had to Die - ${listViewNonSermonPodcastRecord.podcastName}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );

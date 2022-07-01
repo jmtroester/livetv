@@ -1,8 +1,8 @@
 // Export pages
 export 'live_t_v_splash/live_t_v_splash_widget.dart' show LiveTVSplashWidget;
 export 'live_t_v_log_in/live_t_v_log_in_widget.dart' show LiveTVLogInWidget;
-export 'live_t_v_reg/live_t_v_reg_widget.dart' show LiveTVRegWidget;
 export 'home/home_widget.dart' show HomeWidget;
+export 'live_t_v_reg/live_t_v_reg_widget.dart' show LiveTVRegWidget;
 export 'sermon_nav/sermon_nav_widget.dart' show SermonNavWidget;
 export 'sermons_old/sermons_old_widget.dart' show SermonsOldWidget;
 export 'mini_sermon_videos_old/mini_sermon_videos_old_widget.dart'
@@ -28,8 +28,8 @@ export 'podcast_audio_old/podcast_audio_old_widget.dart'
     show PodcastAudioOldWidget;
 export 'edit_profile/edit_profile_widget.dart' show EditProfileWidget;
 export 'social_feed/social_feed_widget.dart' show SocialFeedWidget;
-export 'post_details/post_details_widget.dart' show PostDetailsWidget;
 export 'create_post/create_post_widget.dart' show CreatePostWidget;
+export 'post_details/post_details_widget.dart' show PostDetailsWidget;
 export 'audio_podcast/audio_podcast_widget.dart' show AudioPodcastWidget;
 export 'full_sermon_videos/full_sermon_videos_widget.dart'
     show FullSermonVideosWidget;
@@ -40,3 +40,6 @@ export 'push_notification/push_notification_widget.dart'
     show PushNotificationWidget;
 export 'push_notification_update/push_notification_update_widget.dart'
     show PushNotificationUpdateWidget;
+export 'full_sermon_videos_copy/full_sermon_videos_copy_widget.dart'
+    show FullSermonVideosCopyWidget;
+export 'all_catechisms/all_catechisms_widget.dart' show AllCatechismsWidget;

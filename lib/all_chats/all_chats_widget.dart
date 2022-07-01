@@ -162,8 +162,7 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
                   logFirebaseEvent('IconButton_Backend-Call');
 
                   final activityLogCreateData = createActivityLogRecordData(
-                    activity:
-                        'User clicked on button to start a 1-to-1 chat on the All Chats screen',
+                    activity: 'Started 1-on-1 chat',
                     time: getCurrentTimestamp,
                     user: currentUserDisplayName,
                   );
@@ -193,8 +192,7 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
                   logFirebaseEvent('IconButton_Backend-Call');
 
                   final activityLogCreateData = createActivityLogRecordData(
-                    activity:
-                        'User clicked on button to start a group chat on the All Chats screen',
+                    activity: 'Started group chat',
                     time: getCurrentTimestamp,
                     user: currentUserDisplayName,
                   );

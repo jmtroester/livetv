@@ -89,6 +89,8 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
         videoName: getParameter(data, 'videoName'),
         audioLink: getParameter(data, 'audioLink'),
         videoThumbnail: getParameter(data, 'videoThumbnail'),
+        audioID: getParameter(data, 'audioID'),
+        videoURL: getParameter(data, 'videoURL'),
       ),
   'SermonAudio_old': (data) async => SermonAudioOldWidget(),
   'Bible': (data) async => NavBarPage(initialPage: 'Bible'),
@@ -123,11 +125,11 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
   'PodcastAudio_old': (data) async => PodcastAudioOldWidget(),
   'editProfile': (data) async => EditProfileWidget(),
   'socialFeed': (data) async => NavBarPage(initialPage: 'socialFeed'),
+  'createPost': (data) async => CreatePostWidget(),
   'postDetails': (data) async => PostDetailsWidget(
         postRef: getParameter(data, 'postRef'),
         userRef: getParameter(data, 'userRef'),
       ),
-  'createPost': (data) async => CreatePostWidget(),
   'AudioPodcast': (data) async => AudioPodcastWidget(),
   'FullSermonVideos': (data) async => FullSermonVideosWidget(),
   'sharePost': (data) async => SharePostWidget(
@@ -140,6 +142,8 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
   'MiniSermonVideo': (data) async => MiniSermonVideoWidget(),
   'pushNotification': (data) async => PushNotificationWidget(),
   'pushNotificationUpdate': (data) async => PushNotificationUpdateWidget(),
+  'FullSermonVideosCopy': (data) async => FullSermonVideosCopyWidget(),
+  'AllCatechisms': (data) async => AllCatechismsWidget(),
 };
 
 bool hasMatchingParameters(Map<String, dynamic> data, Set<String> params) =>

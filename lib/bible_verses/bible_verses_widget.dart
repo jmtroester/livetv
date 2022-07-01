@@ -35,7 +35,7 @@ class _BibleVersesWidgetState extends State<BibleVersesWidget> {
       logFirebaseEvent('BibleVerses_Backend-Call');
 
       final activityLogCreateData = createActivityLogRecordData(
-        activity: 'User viewed a Bible search for - ${widget.verseReference}',
+        activity: 'Viewed Bible verse - ${widget.verseReference}',
         time: getCurrentTimestamp,
         user: currentUserDisplayName,
       );

@@ -223,8 +223,7 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                   logFirebaseEvent('Button_Backend-Call');
 
                   final activityLogCreateData = createActivityLogRecordData(
-                    activity:
-                        'User creates a new post: ${postContentController.text}',
+                    activity: 'New post: ${postContentController.text}',
                     time: getCurrentTimestamp,
                     user: currentUserDisplayName,
                   );

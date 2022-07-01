@@ -47,7 +47,7 @@ class _LiveTVSplashWidgetState extends State<LiveTVSplashWidget> {
                           'assets/images/AppIcon_dark.jpg',
                           width: 300,
                           height: 300,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
