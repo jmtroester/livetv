@@ -21,6 +21,7 @@ class _PodcastAudioOldWidgetState extends State<PodcastAudioOldWidget>
     'audioPlayerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 600,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(-100, 0),
@@ -153,7 +154,7 @@ class _PodcastAudioOldWidgetState extends State<PodcastAudioOldWidget>
                           audio: Audio.network(
                             columnNonSermonPodcastRecord.podcastLink,
                             metas: Metas(
-                              id: 'df3hg_-plhln8ce',
+                              id: 'df3hg_-zxd23u3s',
                               title: columnNonSermonPodcastRecord.podcastName,
                             ),
                           ),

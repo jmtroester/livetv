@@ -196,7 +196,7 @@ class _BibleWidgetState extends State<BibleWidget> {
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User searched for a Bible passage - ${textController.text}',
+                                      'Search for - ${textController.text}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );

@@ -88,16 +88,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => LiveTVLogInWidget(),
             ),
             FFRoute(
-              name: 'LiveTVReg',
-              path: 'liveTVReg',
-              builder: (context, params) => LiveTVRegWidget(),
-            ),
-            FFRoute(
               name: 'Home',
               path: 'home',
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'Home')
                   : HomeWidget(),
+            ),
+            FFRoute(
+              name: 'LiveTVReg',
+              path: 'liveTVReg',
+              builder: (context, params) => LiveTVRegWidget(),
             ),
             FFRoute(
               name: 'SermonNav',
@@ -126,6 +126,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 audioLink: params.getParam('audioLink', ParamType.String),
                 videoThumbnail:
                     params.getParam('videoThumbnail', ParamType.String),
+                audioID: params.getParam('audioID', ParamType.int),
+                videoURL: params.getParam('videoURL', ParamType.String),
               ),
             ),
             FFRoute(
@@ -245,6 +247,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   : SocialFeedWidget(),
             ),
             FFRoute(
+              name: 'createPost',
+              path: 'createPost',
+              builder: (context, params) => CreatePostWidget(),
+            ),
+            FFRoute(
               name: 'postDetails',
               path: 'postDetails',
               builder: (context, params) => PostDetailsWidget(
@@ -253,11 +260,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 userRef: params.getParam(
                     'userRef', ParamType.DocumentReference, 'users'),
               ),
-            ),
-            FFRoute(
-              name: 'createPost',
-              path: 'createPost',
-              builder: (context, params) => CreatePostWidget(),
             ),
             FFRoute(
               name: 'AudioPodcast',
@@ -294,6 +296,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'pushNotificationUpdate',
               path: 'pushNotificationUpdate',
               builder: (context, params) => PushNotificationUpdateWidget(),
+            ),
+            FFRoute(
+              name: 'FullSermonVideosCopy',
+              path: 'fullSermonVideosCopy',
+              builder: (context, params) => FullSermonVideosCopyWidget(),
+            ),
+            FFRoute(
+              name: 'AllCatechisms',
+              path: 'allCatechisms',
+              builder: (context, params) => AllCatechismsWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),

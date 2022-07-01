@@ -35,6 +35,14 @@ abstract class SermonVideosRecord
   String get text;
 
   @nullable
+  @BuiltValueField(wireName: 'audio_id')
+  int get audioId;
+
+  @nullable
+  @BuiltValueField(wireName: 'url_string')
+  String get urlString;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -44,7 +52,9 @@ abstract class SermonVideosRecord
     ..sermonName = ''
     ..sermonThumbnail = ''
     ..audioLink = ''
-    ..text = '';
+    ..text = ''
+    ..audioId = 0
+    ..urlString = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('sermon_videos');
@@ -75,6 +85,8 @@ Map<String, dynamic> createSermonVideosRecordData({
   String sermonThumbnail,
   String audioLink,
   String text,
+  int audioId,
+  String urlString,
 }) =>
     serializers.toFirestore(
         SermonVideosRecord.serializer,
@@ -84,4 +96,6 @@ Map<String, dynamic> createSermonVideosRecordData({
           ..sermonName = sermonName
           ..sermonThumbnail = sermonThumbnail
           ..audioLink = audioLink
-          ..text = text));
+          ..text = text
+          ..audioId = audioId
+          ..urlString = urlString));

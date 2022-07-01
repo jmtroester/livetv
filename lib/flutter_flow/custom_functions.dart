@@ -37,3 +37,17 @@ DateTime addADate(DateTime entryDate) {
     return entryDate.add(Duration(days: 1));
   }
 }
+
+String alterURL(String inputURL) {
+  // Remove everything before the phrase _media/
+  final index = inputURL.indexOf('_media-');
+  return inputURL.replaceRange(0, index, '');
+}
+
+double calcPercentage(
+  int inputStart,
+  int points,
+) {
+  // point minus inputStart then divide by 100
+  return ((points - inputStart) / 100).abs();
+}

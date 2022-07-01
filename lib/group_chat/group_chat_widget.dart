@@ -323,7 +323,7 @@ class _GroupChatWidgetState extends State<GroupChatWidget> {
 
                   final activityLogCreateData = createActivityLogRecordData(
                     activity:
-                        'User selected the following individuals to start a group chat with: ${groupChat.users.toList().length.toString()}',
+                        'Added people to chat - ${groupChat.users.toList().length.toString()}',
                     time: getCurrentTimestamp,
                     user: currentUserDisplayName,
                   );

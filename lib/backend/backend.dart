@@ -19,6 +19,8 @@ import 'schema/non_sermon_podcast_record.dart';
 import 'schema/social_posts_record.dart';
 import 'schema/comments_record.dart';
 import 'schema/misc_record.dart';
+import 'schema/catechisms_record.dart';
+import 'schema/levels_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -41,6 +43,8 @@ export 'schema/non_sermon_podcast_record.dart';
 export 'schema/social_posts_record.dart';
 export 'schema/comments_record.dart';
 export 'schema/misc_record.dart';
+export 'schema/catechisms_record.dart';
+export 'schema/levels_record.dart';
 
 /// Functions to query FrontVideosRecords (as a Stream and as a Future).
 Stream<List<FrontVideosRecord>> queryFrontVideosRecord({
@@ -670,6 +674,90 @@ Future<FFFirestorePage<MiscRecord>> queryMiscRecordPage({
     queryCollectionPage(
       MiscRecord.collection,
       MiscRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query CatechismsRecords (as a Stream and as a Future).
+Stream<List<CatechismsRecord>> queryCatechismsRecord({
+  Query Function(Query) queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      CatechismsRecord.collection,
+      CatechismsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<CatechismsRecord>> queryCatechismsRecordOnce({
+  Query Function(Query) queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      CatechismsRecord.collection,
+      CatechismsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<CatechismsRecord>> queryCatechismsRecordPage({
+  Query Function(Query) queryBuilder,
+  DocumentSnapshot nextPageMarker,
+  int pageSize,
+  bool isStream,
+}) =>
+    queryCollectionPage(
+      CatechismsRecord.collection,
+      CatechismsRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query LevelsRecords (as a Stream and as a Future).
+Stream<List<LevelsRecord>> queryLevelsRecord({
+  Query Function(Query) queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      LevelsRecord.collection,
+      LevelsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<LevelsRecord>> queryLevelsRecordOnce({
+  Query Function(Query) queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      LevelsRecord.collection,
+      LevelsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<LevelsRecord>> queryLevelsRecordPage({
+  Query Function(Query) queryBuilder,
+  DocumentSnapshot nextPageMarker,
+  int pageSize,
+  bool isStream,
+}) =>
+    queryCollectionPage(
+      LevelsRecord.collection,
+      LevelsRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

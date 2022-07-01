@@ -23,6 +23,7 @@ class _FullSermonVideosWidgetState extends State<FullSermonVideosWidget>
     'containerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 800,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(50, 0),
@@ -179,6 +180,12 @@ class _FullSermonVideosWidgetState extends State<FullSermonVideosWidget>
                                     'audioLink': serializeParam(
                                         listViewSermonVideosRecord.audioLink,
                                         ParamType.String),
+                                    'audioID': serializeParam(
+                                        listViewSermonVideosRecord.audioId,
+                                        ParamType.int),
+                                    'videoURL': serializeParam(
+                                        listViewSermonVideosRecord.urlString,
+                                        ParamType.String),
                                   }.withoutNulls,
                                 );
                                 logFirebaseEvent('videoCard_Backend-Call');
@@ -194,7 +201,7 @@ class _FullSermonVideosWidgetState extends State<FullSermonVideosWidget>
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on Full Sermon ${listViewSermonVideosRecord.sermonName} to navigate to the video specific screen to watch',
+                                      'Full Sermon - ${listViewSermonVideosRecord.sermonName}',
                                   time: getCurrentTimestamp,
                                   user: currentUserDisplayName,
                                 );

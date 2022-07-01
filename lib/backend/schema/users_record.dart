@@ -71,6 +71,13 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   DateTime get lastLogin;
 
   @nullable
+  int get points;
+
+  @nullable
+  @BuiltValueField(wireName: 'level_id')
+  int get levelId;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -88,7 +95,9 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..remindDevo = false
     ..devoAlert = false
     ..devoDates = ListBuilder()
-    ..nonSermonPodcastsWatched = ListBuilder();
+    ..nonSermonPodcastsWatched = ListBuilder()
+    ..points = 0
+    ..levelId = 0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -123,6 +132,8 @@ Map<String, dynamic> createUsersRecordData({
   bool remindDevo,
   bool devoAlert,
   DateTime lastLogin,
+  int points,
+  int levelId,
 }) =>
     serializers.toFirestore(
         UsersRecord.serializer,
@@ -142,4 +153,6 @@ Map<String, dynamic> createUsersRecordData({
           ..devoAlert = devoAlert
           ..devoDates = null
           ..nonSermonPodcastsWatched = null
-          ..lastLogin = lastLogin));
+          ..lastLogin = lastLogin
+          ..points = points
+          ..levelId = levelId));

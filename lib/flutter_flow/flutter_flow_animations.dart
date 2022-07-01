@@ -26,6 +26,7 @@ class AnimationInfo {
     @required this.trigger,
     @required this.duration,
     this.delay = 0,
+    this.hideBeforeAnimating = true,
     this.fadeIn = false,
     this.initialState,
     this.finalState,
@@ -35,6 +36,7 @@ class AnimationInfo {
   final AnimationTrigger trigger;
   final int duration;
   final int delay;
+  final bool hideBeforeAnimating;
   final bool fadeIn;
   final AnimationState initialState;
   final AnimationState finalState;
@@ -83,7 +85,14 @@ extension AnimatedWidgetExtension on Widget {
         // they are first loaded, but before they are triggered.
         // The widget should remain as it is.
         if (animationInfo.curvedAnimation.status == AnimationStatus.dismissed) {
-          return child;
+          if (animationInfo.hideBeforeAnimating) {
+            return Opacity(
+              opacity: 0,
+              child: child,
+            );
+          } else {
+            return child;
+          }
         }
         var returnedWidget = child;
         if (animationInfo.initialState.offset.dx != 0 ||

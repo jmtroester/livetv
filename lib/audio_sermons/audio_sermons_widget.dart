@@ -23,6 +23,7 @@ class _AudioSermonsWidgetState extends State<AudioSermonsWidget>
     'containerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       duration: 800,
+      hideBeforeAnimating: false,
       fadeIn: true,
       initialState: AnimationState(
         offset: Offset(50, 0),
@@ -177,7 +178,7 @@ class _AudioSermonsWidgetState extends State<AudioSermonsWidget>
                                 final activityLogCreateData =
                                     createActivityLogRecordData(
                                   activity:
-                                      'User clicked on the podcast sermon ${listViewSermonVideosRecord.sermonName}to view it on the podcast specific page',
+                                      'Audio Sermon - ${listViewSermonVideosRecord.sermonName}',
                                 );
                                 await ActivityLogRecord.collection
                                     .doc()

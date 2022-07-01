@@ -46,6 +46,8 @@ abstract class FlutterFlowTheme {
   Color black600;
   Color tertiary400;
   Color textColor;
+  Color backgroundComponents;
+  Color headerGray;
 
   TextStyle get title1 => GoogleFonts.getFont(
         'Montserrat',
@@ -109,6 +111,8 @@ class LightModeTheme extends FlutterFlowTheme {
   Color black600 = Color(0xFF090F13);
   Color tertiary400 = Color(0xFF39D2C0);
   Color textColor = Color(0xFF1E2429);
+  Color backgroundComponents = Color(0xFF1D2428);
+  Color headerGray = Color(0xFFE7E7E7);
 }
 
 class DarkModeTheme extends FlutterFlowTheme {
@@ -129,6 +133,8 @@ class DarkModeTheme extends FlutterFlowTheme {
   Color black600 = Color(0xFF090F13);
   Color tertiary400 = Color(0xFF39D2C0);
   Color textColor = Color(0xFF1E2429);
+  Color backgroundComponents = Color(0xFF1D2428);
+  Color headerGray = Color(0x03E3E3E3);
 }
 
 extension TextStyleHelper on TextStyle {

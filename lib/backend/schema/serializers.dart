@@ -15,6 +15,8 @@ import 'non_sermon_podcast_record.dart';
 import 'social_posts_record.dart';
 import 'comments_record.dart';
 import 'misc_record.dart';
+import 'catechisms_record.dart';
+import 'levels_record.dart';
 
 import 'index.dart';
 
@@ -40,6 +42,8 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   SocialPostsRecord,
   CommentsRecord,
   MiscRecord,
+  CatechismsRecord,
+  LevelsRecord,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())
