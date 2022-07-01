@@ -120,6 +120,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     ),
   };
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  LatLng currentUserLocationValue;
 
   @override
   void initState() {
@@ -127,6 +128,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     // On page load action.
     SchedulerBinding.instance?.addPostFrameCallback((_) async {
       logFirebaseEvent('HOME_PAGE_Home_ON_PAGE_LOAD');
+      currentUserLocationValue =
+          await getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0));
       logFirebaseEvent('Home_Backend-Call');
 
       final activityLogCreateData = createActivityLogRecordData(
@@ -136,6 +139,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         android: isAndroid,
         ios: isiOS,
         appVersion: '3.4.7',
+        location: currentUserLocationValue,
       );
       await ActivityLogRecord.collection.doc().set(activityLogCreateData);
       logFirebaseEvent('Home_Backend-Call');
