@@ -11,7 +11,7 @@ service cloud.firestore {
     match /sermon_videos/{document} {
       allow create: if true;
       allow read: if true;
-      allow write: if false;
+      allow write: if true;
       allow delete: if false;
     }
 
@@ -125,6 +125,130 @@ service cloud.firestore {
       allow write: if false;
       allow delete: if false;
     }
+
+    match /journal_entries/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /bible_book_overall/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /bible_book_ids/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /bible_study_notes/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /discipleship_request/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /prayers/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /discipleship_report/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /discipleship_help/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /sermon_topic/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /sermon_series/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /sermon_hub/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /sermon_hub_backup/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /my_church/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /live_church/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /social_post_likes/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /live_video/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /live_video/{parent}/live_video_playlists/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/live_video_playlists/{document} {
+      allow read: if true;
+    }
+
 
     match /ff_user_push_notifications/{id} {
       allow read, update, delete: if false;

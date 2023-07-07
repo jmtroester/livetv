@@ -15,6 +15,134 @@
       ]
     },
     {
+      "collectionGroup": "journal_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "journal_writer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "journal_date",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "activity_log",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "show_user",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "time",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "prayers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "is_public",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "time_submitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "discipleship_help",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "help_type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "completed",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "chats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "users",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "last_message_sent_by",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "sermon_hub",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "full_sermon",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date_presented",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "sermon_hub",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "sermon_series",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "full_sermon",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date_presented",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "sermon_hub",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "full_sermon",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "sermon_topic",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "date_presented",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "chat_messages",
       "queryScope": "COLLECTION",
       "fields": [

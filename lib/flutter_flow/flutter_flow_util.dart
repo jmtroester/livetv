@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:from_css_color/from_css_color.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:json_path/json_path.dart';
@@ -13,27 +14,45 @@ import '../main.dart';
 
 import 'lat_lng.dart';
 
+export 'keep_alive_wrapper.dart';
 export 'lat_lng.dart';
 export 'place.dart';
+export 'uploaded_file.dart';
 export '../app_state.dart';
+export 'flutter_flow_model.dart';
 export 'dart:math' show min, max;
+export 'dart:typed_data' show Uint8List;
+export 'dart:convert' show jsonEncode, jsonDecode;
 export 'package:intl/intl.dart';
-export 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference;
+export 'package:cloud_firestore/cloud_firestore.dart'
+    show DocumentReference, FirebaseFirestore;
 export 'package:page_transition/page_transition.dart';
-export '../backend/firebase_analytics/analytics.dart';
+export 'internationalization.dart' show FFLocalizations;
+export '/backend/firebase_analytics/analytics.dart';
 export 'nav/nav.dart';
+export 'firebase_remote_config_util.dart';
 
-T valueOrDefault<T>(T value, T defaultValue) =>
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<PageRoute>();
+
+T valueOrDefault<T>(T? value, T defaultValue) =>
     (value is String && value.isEmpty) || value == null ? defaultValue : value;
 
-String dateTimeFormat(String format, DateTime dateTime) {
+void _setTimeagoLocales() {
+  timeago.setLocaleMessages('en', timeago.EnMessages());
+  timeago.setLocaleMessages('en_short', timeago.EnShortMessages());
+  timeago.setLocaleMessages('es', timeago.EsMessages());
+  timeago.setLocaleMessages('es_short', timeago.EsShortMessages());
+}
+
+String dateTimeFormat(String format, DateTime? dateTime, {String? locale}) {
   if (dateTime == null) {
     return '';
   }
   if (format == 'relative') {
-    return timeago.format(dateTime);
+    _setTimeagoLocales();
+    return timeago.format(dateTime, locale: locale);
   }
-  return DateFormat(format).format(dateTime);
+  return DateFormat(format, locale).format(dateTime);
 }
 
 Future launchURL(String url) async {
@@ -43,6 +62,13 @@ Future launchURL(String url) async {
   } catch (e) {
     throw 'Could not launch $uri: $e';
   }
+}
+
+Color colorFromCssString(String color, {Color? defaultColor}) {
+  try {
+    return fromCssColor(color);
+  } catch (_) {}
+  return defaultColor ?? Colors.black;
 }
 
 enum FormatType {
@@ -61,18 +87,21 @@ enum DecimalType {
 }
 
 String formatNumber(
-  num value, {
-  FormatType formatType,
-  DecimalType decimalType,
-  String currency,
+  num? value, {
+  required FormatType formatType,
+  DecimalType? decimalType,
+  String? currency,
   bool toLowerCase = false,
-  String format,
-  String locale,
+  String? format,
+  String? locale,
 }) {
+  if (value == null) {
+    return '';
+  }
   var formattedValue = '';
   switch (formatType) {
     case FormatType.decimal:
-      switch (decimalType) {
+      switch (decimalType!) {
         case DecimalType.automatic:
           formattedValue = NumberFormat.decimalPattern().format(value);
           break;
@@ -120,6 +149,13 @@ String formatNumber(
 }
 
 DateTime get getCurrentTimestamp => DateTime.now();
+DateTime dateTimeFromSecondsSinceEpoch(int seconds) {
+  return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+}
+
+extension DateTimeConversionExtension on DateTime {
+  int get secondsSinceEpoch => (millisecondsSinceEpoch / 1000).round();
+}
 
 extension DateTimeComparisonOperators on DateTime {
   bool operator <(DateTime other) => isBefore(other);
@@ -128,31 +164,53 @@ extension DateTimeComparisonOperators on DateTime {
   bool operator >=(DateTime other) => this > other || isAtSameMomentAs(other);
 }
 
-dynamic getJsonField(dynamic response, String jsonPath) {
+dynamic getJsonField(
+  dynamic response,
+  String jsonPath, [
+  bool isForList = false,
+]) {
   final field = JsonPath(jsonPath).read(response);
-  return field.isNotEmpty
-      ? field.length > 1
-          ? field.map((f) => f.value).toList()
-          : field.first.value
-      : null;
+  if (field.isEmpty) {
+    return null;
+  }
+  if (field.length > 1) {
+    return field.map((f) => f.value).toList();
+  }
+  final value = field.first.value;
+  return isForList && value is! Iterable ? [value] : value;
+}
+
+Rect? getWidgetBoundingBox(BuildContext context) {
+  try {
+    final renderBox = context.findRenderObject() as RenderBox?;
+    return renderBox!.localToGlobal(Offset.zero) & renderBox.size;
+  } catch (_) {
+    return null;
+  }
 }
 
 bool get isAndroid => !kIsWeb && Platform.isAndroid;
 bool get isiOS => !kIsWeb && Platform.isIOS;
 bool get isWeb => kIsWeb;
+
+const kBreakpointSmall = 479.0;
+const kBreakpointMedium = 767.0;
+const kBreakpointLarge = 991.0;
+bool isMobileWidth(BuildContext context) =>
+    MediaQuery.sizeOf(context).width < kBreakpointSmall;
 bool responsiveVisibility({
-  @required BuildContext context,
+  required BuildContext context,
   bool phone = true,
   bool tablet = true,
   bool tabletLandscape = true,
   bool desktop = true,
 }) {
-  final width = MediaQuery.of(context).size.width;
-  if (width < 479) {
+  final width = MediaQuery.sizeOf(context).width;
+  if (width < kBreakpointSmall) {
     return phone;
-  } else if (width < 767) {
+  } else if (width < kBreakpointMedium) {
     return tablet;
-  } else if (width < 991) {
+  } else if (width < kBreakpointLarge) {
     return tabletLandscape;
   } else {
     return desktop;
@@ -163,13 +221,13 @@ const kTextValidatorUsernameRegex = r'^[a-zA-Z][a-zA-Z0-9_-]{2,16}$';
 const kTextValidatorEmailRegex =
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
 const kTextValidatorWebsiteRegex =
-    r'(https?:\/\/)?(www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|(https?:\/\/)?(www\.)?(?!ww)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)';
+    r'(https?:\/\/)?(www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|(https?:\/\/)?(www\.)?(?!ww)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)';
 
-LatLng cachedUserLocation;
+LatLng? cachedUserLocation;
 Future<LatLng> getCurrentUserLocation(
-    {LatLng defaultLocation, bool cached = false}) async {
+    {required LatLng defaultLocation, bool cached = false}) async {
   if (cached && cachedUserLocation != null) {
-    return cachedUserLocation;
+    return cachedUserLocation!;
   }
   return queryCurrentUserLocation().then((loc) {
     if (loc != null) {
@@ -182,7 +240,7 @@ Future<LatLng> getCurrentUserLocation(
   });
 }
 
-Future<LatLng> queryCurrentUserLocation() async {
+Future<LatLng?> queryCurrentUserLocation() async {
   final serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     return Future.error('Location services are disabled.');
@@ -207,12 +265,25 @@ Future<LatLng> queryCurrentUserLocation() async {
       : null;
 }
 
+extension FFTextEditingControllerExt on TextEditingController? {
+  String get text => this == null ? '' : this!.text;
+  set text(String newText) => this?.text = newText;
+}
+
+extension IterableExt<T> on Iterable<T> {
+  List<S> mapIndexed<S>(S Function(int, T) func) => toList()
+      .asMap()
+      .map((index, value) => MapEntry(index, func(index, value)))
+      .values
+      .toList();
+}
+
 extension StringDocRef on String {
   DocumentReference get ref => FirebaseFirestore.instance.doc(this);
 }
 
 void setAppLanguage(BuildContext context, String language) =>
-    MyApp.of(context).setLocale(Locale(language, ''));
+    MyApp.of(context).setLocale(language);
 
 void setDarkModeSetting(BuildContext context, ThemeMode themeMode) =>
     MyApp.of(context).setThemeMode(themeMode);
@@ -248,8 +319,31 @@ void showSnackbar(
 }
 
 extension FFStringExt on String {
-  String maybeHandleOverflow({int maxChars, String replacement = ''}) =>
+  String maybeHandleOverflow({int? maxChars, String replacement = ''}) =>
       maxChars != null && length > maxChars
           ? replaceRange(maxChars, null, replacement)
           : this;
+}
+
+extension ListFilterExt<T> on Iterable<T?> {
+  List<T> get withoutNulls => where((s) => s != null).map((e) => e!).toList();
+}
+
+extension ListDivideExt<T extends Widget> on Iterable<T> {
+  Iterable<MapEntry<int, Widget>> get enumerate => toList().asMap().entries;
+
+  List<Widget> divide(Widget t) => isEmpty
+      ? []
+      : (enumerate.map((e) => [e.value, t]).expand((i) => i).toList()
+        ..removeLast());
+
+  List<T> around(T t) => toList()
+    ..insert(0, t)
+    ..add(t);
+
+  List<Widget> addToStart(Widget t) =>
+      enumerate.map((e) => e.value).toList()..insert(0, t);
+
+  List<Widget> addToEnd(Widget t) =>
+      enumerate.map((e) => e.value).toList()..add(t);
 }

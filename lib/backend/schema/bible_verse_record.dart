@@ -1,64 +1,106 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
+import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/util/schema_util.dart';
+
 import 'index.dart';
-import 'serializers.dart';
-import 'package:built_value/built_value.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 
-part 'bible_verse_record.g.dart';
+class BibleVerseRecord extends FirestoreRecord {
+  BibleVerseRecord._(
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
+    _initializeFields();
+  }
 
-abstract class BibleVerseRecord
-    implements Built<BibleVerseRecord, BibleVerseRecordBuilder> {
-  static Serializer<BibleVerseRecord> get serializer =>
-      _$bibleVerseRecordSerializer;
+  // "verse_no" field.
+  String? _verseNo;
+  String get verseNo => _verseNo ?? '';
+  bool hasVerseNo() => _verseNo != null;
 
-  @nullable
-  @BuiltValueField(wireName: 'verse_no')
-  String get verseNo;
+  // "chapter_no" field.
+  DocumentReference? _chapterNo;
+  DocumentReference? get chapterNo => _chapterNo;
+  bool hasChapterNo() => _chapterNo != null;
 
-  @nullable
-  @BuiltValueField(wireName: 'chapter_no')
-  DocumentReference get chapterNo;
+  // "book_name" field.
+  DocumentReference? _bookName;
+  DocumentReference? get bookName => _bookName;
+  bool hasBookName() => _bookName != null;
 
-  @nullable
-  @BuiltValueField(wireName: 'book_name')
-  DocumentReference get bookName;
-
-  @nullable
-  @BuiltValueField(wireName: kDocumentReferenceField)
-  DocumentReference get reference;
-
-  static void _initializeBuilder(BibleVerseRecordBuilder builder) =>
-      builder..verseNo = '';
+  void _initializeFields() {
+    _verseNo = snapshotData['verse_no'] as String?;
+    _chapterNo = snapshotData['chapter_no'] as DocumentReference?;
+    _bookName = snapshotData['book_name'] as DocumentReference?;
+  }
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('bible_verse');
 
-  static Stream<BibleVerseRecord> getDocument(DocumentReference ref) => ref
-      .snapshots()
-      .map((s) => serializers.deserializeWith(serializer, serializedData(s)));
+  static Stream<BibleVerseRecord> getDocument(DocumentReference ref) =>
+      ref.snapshots().map((s) => BibleVerseRecord.fromSnapshot(s));
 
-  static Future<BibleVerseRecord> getDocumentOnce(DocumentReference ref) => ref
-      .get()
-      .then((s) => serializers.deserializeWith(serializer, serializedData(s)));
+  static Future<BibleVerseRecord> getDocumentOnce(DocumentReference ref) =>
+      ref.get().then((s) => BibleVerseRecord.fromSnapshot(s));
 
-  BibleVerseRecord._();
-  factory BibleVerseRecord([void Function(BibleVerseRecordBuilder) updates]) =
-      _$BibleVerseRecord;
+  static BibleVerseRecord fromSnapshot(DocumentSnapshot snapshot) =>
+      BibleVerseRecord._(
+        snapshot.reference,
+        mapFromFirestore(snapshot.data() as Map<String, dynamic>),
+      );
 
   static BibleVerseRecord getDocumentFromData(
-          Map<String, dynamic> data, DocumentReference reference) =>
-      serializers.deserializeWith(serializer,
-          {...mapFromFirestore(data), kDocumentReferenceField: reference});
+    Map<String, dynamic> data,
+    DocumentReference reference,
+  ) =>
+      BibleVerseRecord._(reference, mapFromFirestore(data));
+
+  @override
+  String toString() =>
+      'BibleVerseRecord(reference: ${reference.path}, data: $snapshotData)';
+
+  @override
+  int get hashCode => reference.path.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is BibleVerseRecord &&
+      reference.path.hashCode == other.reference.path.hashCode;
 }
 
 Map<String, dynamic> createBibleVerseRecordData({
-  String verseNo,
-  DocumentReference chapterNo,
-  DocumentReference bookName,
-}) =>
-    serializers.toFirestore(
-        BibleVerseRecord.serializer,
-        BibleVerseRecord((b) => b
-          ..verseNo = verseNo
-          ..chapterNo = chapterNo
-          ..bookName = bookName));
+  String? verseNo,
+  DocumentReference? chapterNo,
+  DocumentReference? bookName,
+}) {
+  final firestoreData = mapToFirestore(
+    <String, dynamic>{
+      'verse_no': verseNo,
+      'chapter_no': chapterNo,
+      'book_name': bookName,
+    }.withoutNulls,
+  );
+
+  return firestoreData;
+}
+
+class BibleVerseRecordDocumentEquality implements Equality<BibleVerseRecord> {
+  const BibleVerseRecordDocumentEquality();
+
+  @override
+  bool equals(BibleVerseRecord? e1, BibleVerseRecord? e2) {
+    return e1?.verseNo == e2?.verseNo &&
+        e1?.chapterNo == e2?.chapterNo &&
+        e1?.bookName == e2?.bookName;
+  }
+
+  @override
+  int hash(BibleVerseRecord? e) =>
+      const ListEquality().hash([e?.verseNo, e?.chapterNo, e?.bookName]);
+
+  @override
+  bool isValidKey(Object? o) => o is BibleVerseRecord;
+}

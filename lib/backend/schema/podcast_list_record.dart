@@ -1,73 +1,115 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
+import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/util/schema_util.dart';
+
 import 'index.dart';
-import 'serializers.dart';
-import 'package:built_value/built_value.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 
-part 'podcast_list_record.g.dart';
+class PodcastListRecord extends FirestoreRecord {
+  PodcastListRecord._(
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
+    _initializeFields();
+  }
 
-abstract class PodcastListRecord
-    implements Built<PodcastListRecord, PodcastListRecordBuilder> {
-  static Serializer<PodcastListRecord> get serializer =>
-      _$podcastListRecordSerializer;
+  // "podcast_id" field.
+  int? _podcastId;
+  int get podcastId => _podcastId ?? 0;
+  bool hasPodcastId() => _podcastId != null;
 
-  @nullable
-  @BuiltValueField(wireName: 'podcast_id')
-  int get podcastId;
+  // "podcast_link" field.
+  String? _podcastLink;
+  String get podcastLink => _podcastLink ?? '';
+  bool hasPodcastLink() => _podcastLink != null;
 
-  @nullable
-  @BuiltValueField(wireName: 'podcast_link')
-  String get podcastLink;
+  // "podcast_name" field.
+  String? _podcastName;
+  String get podcastName => _podcastName ?? '';
+  bool hasPodcastName() => _podcastName != null;
 
-  @nullable
-  @BuiltValueField(wireName: 'podcast_name')
-  String get podcastName;
+  // "embed_code" field.
+  String? _embedCode;
+  String get embedCode => _embedCode ?? '';
+  bool hasEmbedCode() => _embedCode != null;
 
-  @nullable
-  @BuiltValueField(wireName: 'embed_code')
-  String get embedCode;
-
-  @nullable
-  @BuiltValueField(wireName: kDocumentReferenceField)
-  DocumentReference get reference;
-
-  static void _initializeBuilder(PodcastListRecordBuilder builder) => builder
-    ..podcastId = 0
-    ..podcastLink = ''
-    ..podcastName = ''
-    ..embedCode = '';
+  void _initializeFields() {
+    _podcastId = castToType<int>(snapshotData['podcast_id']);
+    _podcastLink = snapshotData['podcast_link'] as String?;
+    _podcastName = snapshotData['podcast_name'] as String?;
+    _embedCode = snapshotData['embed_code'] as String?;
+  }
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('podcast_list');
 
-  static Stream<PodcastListRecord> getDocument(DocumentReference ref) => ref
-      .snapshots()
-      .map((s) => serializers.deserializeWith(serializer, serializedData(s)));
+  static Stream<PodcastListRecord> getDocument(DocumentReference ref) =>
+      ref.snapshots().map((s) => PodcastListRecord.fromSnapshot(s));
 
-  static Future<PodcastListRecord> getDocumentOnce(DocumentReference ref) => ref
-      .get()
-      .then((s) => serializers.deserializeWith(serializer, serializedData(s)));
+  static Future<PodcastListRecord> getDocumentOnce(DocumentReference ref) =>
+      ref.get().then((s) => PodcastListRecord.fromSnapshot(s));
 
-  PodcastListRecord._();
-  factory PodcastListRecord([void Function(PodcastListRecordBuilder) updates]) =
-      _$PodcastListRecord;
+  static PodcastListRecord fromSnapshot(DocumentSnapshot snapshot) =>
+      PodcastListRecord._(
+        snapshot.reference,
+        mapFromFirestore(snapshot.data() as Map<String, dynamic>),
+      );
 
   static PodcastListRecord getDocumentFromData(
-          Map<String, dynamic> data, DocumentReference reference) =>
-      serializers.deserializeWith(serializer,
-          {...mapFromFirestore(data), kDocumentReferenceField: reference});
+    Map<String, dynamic> data,
+    DocumentReference reference,
+  ) =>
+      PodcastListRecord._(reference, mapFromFirestore(data));
+
+  @override
+  String toString() =>
+      'PodcastListRecord(reference: ${reference.path}, data: $snapshotData)';
+
+  @override
+  int get hashCode => reference.path.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is PodcastListRecord &&
+      reference.path.hashCode == other.reference.path.hashCode;
 }
 
 Map<String, dynamic> createPodcastListRecordData({
-  int podcastId,
-  String podcastLink,
-  String podcastName,
-  String embedCode,
-}) =>
-    serializers.toFirestore(
-        PodcastListRecord.serializer,
-        PodcastListRecord((p) => p
-          ..podcastId = podcastId
-          ..podcastLink = podcastLink
-          ..podcastName = podcastName
-          ..embedCode = embedCode));
+  int? podcastId,
+  String? podcastLink,
+  String? podcastName,
+  String? embedCode,
+}) {
+  final firestoreData = mapToFirestore(
+    <String, dynamic>{
+      'podcast_id': podcastId,
+      'podcast_link': podcastLink,
+      'podcast_name': podcastName,
+      'embed_code': embedCode,
+    }.withoutNulls,
+  );
+
+  return firestoreData;
+}
+
+class PodcastListRecordDocumentEquality implements Equality<PodcastListRecord> {
+  const PodcastListRecordDocumentEquality();
+
+  @override
+  bool equals(PodcastListRecord? e1, PodcastListRecord? e2) {
+    return e1?.podcastId == e2?.podcastId &&
+        e1?.podcastLink == e2?.podcastLink &&
+        e1?.podcastName == e2?.podcastName &&
+        e1?.embedCode == e2?.embedCode;
+  }
+
+  @override
+  int hash(PodcastListRecord? e) => const ListEquality()
+      .hash([e?.podcastId, e?.podcastLink, e?.podcastName, e?.embedCode]);
+
+  @override
+  bool isValidKey(Object? o) => o is PodcastListRecord;
+}

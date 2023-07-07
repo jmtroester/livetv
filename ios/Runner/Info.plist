@@ -16,6 +16,11 @@
 	<string>LiveTV</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>es</string>
+	</array>
 
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
@@ -54,11 +59,14 @@
 	<true/>
 
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>In order to search nearby, this app requires access to your current location.</string>
+    <string>In order to provide analytics, this app requests access to your current location.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>In order to take a picture or video, this app requires permission to access the camera.</string>
+    <string>In order to stream a video, this app requires permission to access the camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>In order to upload media, this app requires permission to access the photo library.</string>
+    <string>In order to upload data, this app requires permission to access the photo library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>In order to record audio for video stream, this app requires permission to access the microphone.</string>
+
     <key>UIBackgroundModes</key>
     <array>
         <string>fetch</string>

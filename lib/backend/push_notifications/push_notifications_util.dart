@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'serialization_util.dart';
-import '../../auth/auth_util.dart';
+import '../../auth/firebase_auth/auth_util.dart';
 import '../cloud_functions/cloud_functions.dart';
 
 import 'package:flutter/foundation.dart';
@@ -24,19 +24,20 @@ class UserTokenInfo {
 Stream<UserTokenInfo> getFcmTokenStream(String userPath) =>
     Stream.value(!kIsWeb && (Platform.isIOS || Platform.isAndroid))
         .where((shouldGetToken) => shouldGetToken)
-        .asyncMap((_) => FirebaseMessaging.instance.requestPermission().then(
-              (settings) =>
-                  settings.authorizationStatus == AuthorizationStatus.authorized
+        .asyncMap<String?>(
+            (_) => FirebaseMessaging.instance.requestPermission().then(
+                  (settings) => settings.authorizationStatus ==
+                          AuthorizationStatus.authorized
                       ? FirebaseMessaging.instance.getToken()
                       : null,
-            ))
+                ))
         .switchMap((fcmToken) => Stream.value(fcmToken)
             .merge(FirebaseMessaging.instance.onTokenRefresh))
         .where((fcmToken) => fcmToken != null && fcmToken.isNotEmpty)
-        .map((token) => UserTokenInfo(userPath, token));
+        .map((token) => UserTokenInfo(userPath, token!));
 final fcmTokenUserStream = authenticatedUserStream
     .where((user) => user != null)
-    .map((user) => user.reference.path)
+    .map((user) => user!.reference.path)
     .distinct()
     .switchMap(getFcmTokenStream)
     .map(
@@ -51,14 +52,14 @@ final fcmTokenUserStream = authenticatedUserStream
     );
 
 void triggerPushNotification({
-  @required String notificationTitle,
-  @required String notificationText,
-  String notificationImageUrl,
-  DateTime scheduledTime,
-  String notificationSound,
-  @required List<DocumentReference> userRefs,
-  @required String initialPageName,
-  @required Map<String, dynamic> parameterData,
+  required String? notificationTitle,
+  required String? notificationText,
+  String? notificationImageUrl,
+  DateTime? scheduledTime,
+  String? notificationSound,
+  required List<DocumentReference> userRefs,
+  required String initialPageName,
+  required Map<String, dynamic> parameterData,
 }) {
   if ((notificationTitle ?? '').isEmpty || (notificationText ?? '').isEmpty) {
     return;

@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:from_css_color/from_css_color.dart';
 
-import '../../backend/backend.dart';
+import '/backend/backend.dart';
+
 import '../../flutter_flow/lat_lng.dart';
 import '../../flutter_flow/place.dart';
+import '../../flutter_flow/uploaded_file.dart';
 
 /// SERIALIZATION HELPERS
 
@@ -24,10 +27,38 @@ String placeToString(FFPlace place) => jsonEncode({
       'zipCode': place.zipCode,
     });
 
-String serializeParam(dynamic param, ParamType paramType) {
+String uploadedFileToString(FFUploadedFile uploadedFile) =>
+    uploadedFile.serialize();
+
+const _kDocIdDelimeter = '|';
+String _serializeDocumentReference(DocumentReference ref) {
+  final docIds = <String>[];
+  DocumentReference? currentRef = ref;
+  while (currentRef != null) {
+    docIds.add(currentRef.id);
+    // Get the parent document (catching any errors that arise).
+    currentRef = safeGet<DocumentReference?>(() => currentRef?.parent.parent);
+  }
+  // Reverse the list to get the correct ordering.
+  return docIds.reversed.join(_kDocIdDelimeter);
+}
+
+String? serializeParam(
+  dynamic param,
+  ParamType paramType, [
+  bool isList = false,
+]) {
   try {
     if (param == null) {
       return null;
+    }
+    if (isList) {
+      final serializedValues = (param as Iterable)
+          .map((p) => serializeParam(p, paramType, false))
+          .where((p) => p != null)
+          .map((p) => p!)
+          .toList();
+      return json.encode(serializedValues);
     }
     switch (paramType) {
       case ParamType.int:
@@ -44,14 +75,19 @@ String serializeParam(dynamic param, ParamType paramType) {
         return dateTimeRangeToString(param as DateTimeRange);
       case ParamType.LatLng:
         return (param as LatLng).serialize();
+      case ParamType.Color:
+        return (param as Color).toCssString();
       case ParamType.FFPlace:
         return placeToString(param as FFPlace);
+      case ParamType.FFUploadedFile:
+        return uploadedFileToString(param as FFUploadedFile);
       case ParamType.JSON:
         return json.encode(param);
       case ParamType.DocumentReference:
-        return (param as DocumentReference).id;
+        return _serializeDocumentReference(param as DocumentReference);
       case ParamType.Document:
-        return (param as dynamic).reference.id;
+        final reference = (param as FirestoreRecord).reference;
+        return _serializeDocumentReference(reference);
 
       default:
         return null;
@@ -66,7 +102,7 @@ String serializeParam(dynamic param, ParamType paramType) {
 
 /// DESERIALIZATION HELPERS
 
-DateTimeRange dateTimeRangeFromString(String dateTimeRangeStr) {
+DateTimeRange? dateTimeRangeFromString(String dateTimeRangeStr) {
   final pieces = dateTimeRangeStr.split('|');
   if (pieces.length != 2) {
     return null;
@@ -77,7 +113,7 @@ DateTimeRange dateTimeRangeFromString(String dateTimeRangeStr) {
   );
 }
 
-LatLng latLngFromString(String latLngStr) {
+LatLng? latLngFromString(String latLngStr) {
   final pieces = latLngStr.split(',');
   if (pieces.length != 2) {
     return null;
@@ -112,6 +148,21 @@ FFPlace placeFromString(String placeStr) {
   );
 }
 
+FFUploadedFile uploadedFileFromString(String uploadedFileStr) =>
+    FFUploadedFile.deserialize(uploadedFileStr);
+
+DocumentReference _deserializeDocumentReference(
+  String refStr,
+  List<String> collectionNamePath,
+) {
+  var path = '';
+  final docIds = refStr.split(_kDocIdDelimeter);
+  for (int i = 0; i < docIds.length && i < collectionNamePath.length; i++) {
+    path += '/${collectionNamePath[i]}/${docIds[i]}';
+  }
+  return FirebaseFirestore.instance.doc(path);
+}
+
 enum ParamType {
   int,
   double,
@@ -120,20 +171,37 @@ enum ParamType {
   DateTime,
   DateTimeRange,
   LatLng,
+  Color,
   FFPlace,
+  FFUploadedFile,
   JSON,
   Document,
   DocumentReference,
 }
 
-dynamic deserializeParam(
-  String param,
-  ParamType paramType, [
-  String collectionName,
-]) {
+dynamic deserializeParam<T>(
+  String? param,
+  ParamType paramType,
+  bool isList, {
+  List<String>? collectionNamePath,
+}) {
   try {
     if (param == null) {
       return null;
+    }
+    if (isList) {
+      final paramValues = json.decode(param);
+      if (paramValues is! Iterable || paramValues.isEmpty) {
+        return null;
+      }
+      return paramValues
+          .where((p) => p is String)
+          .map((p) => p as String)
+          .map((p) => deserializeParam<T>(p, paramType, false,
+              collectionNamePath: collectionNamePath))
+          .where((p) => p != null)
+          .map((p) => p! as T)
+          .toList();
     }
     switch (paramType) {
       case ParamType.int:
@@ -153,12 +221,16 @@ dynamic deserializeParam(
         return dateTimeRangeFromString(param);
       case ParamType.LatLng:
         return latLngFromString(param);
+      case ParamType.Color:
+        return fromCssColor(param);
       case ParamType.FFPlace:
         return placeFromString(param);
+      case ParamType.FFUploadedFile:
+        return uploadedFileFromString(param);
       case ParamType.JSON:
         return json.decode(param);
       case ParamType.DocumentReference:
-        return FirebaseFirestore.instance.doc('$collectionName/$param');
+        return _deserializeDocumentReference(param, collectionNamePath ?? []);
 
       default:
         return null;
@@ -170,11 +242,30 @@ dynamic deserializeParam(
 }
 
 Future<dynamic> Function(String) getDoc(
-  String collectionName,
-  Serializer serializer,
+  List<String> collectionNamePath,
+  RecordBuilder recordBuilder,
 ) {
-  return (String id) => FirebaseFirestore.instance
-      .doc('$collectionName/$id')
+  return (String ids) => _deserializeDocumentReference(ids, collectionNamePath)
       .get()
-      .then((s) => serializers.deserializeWith(serializer, serializedData(s)));
+      .then((s) => recordBuilder(s));
+}
+
+Future<List<T>> Function(String) getDocList<T>(
+  List<String> collectionNamePath,
+  RecordBuilder<T> recordBuilder,
+) {
+  return (String idsList) {
+    List<String> docIds = [];
+    try {
+      final ids = json.decode(idsList) as Iterable;
+      docIds = ids.where((d) => d is String).map((d) => d as String).toList();
+    } catch (_) {}
+    return Future.wait(
+      docIds.map(
+        (ids) => _deserializeDocumentReference(ids, collectionNamePath)
+            .get()
+            .then((s) => recordBuilder(s)),
+      ),
+    ).then((docs) => docs.where((d) => d != null).map((d) => d!).toList());
+  };
 }

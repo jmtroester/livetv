@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:built_value/built_value.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:from_css_color/from_css_color.dart';
 
-import '../../backend/backend.dart';
+import '/backend/backend.dart';
+
 import '../../flutter_flow/lat_lng.dart';
 import '../../flutter_flow/place.dart';
+import '../../flutter_flow/uploaded_file.dart';
 
 /// SERIALIZATION HELPERS
 
@@ -26,6 +28,9 @@ String placeToString(FFPlace place) => jsonEncode({
       'zipCode': place.zipCode,
     });
 
+String uploadedFileToString(FFUploadedFile uploadedFile) =>
+    uploadedFile.serialize();
+
 /// Converts the input value into a value that can be JSON encoded.
 dynamic serializeParameter(dynamic value) {
   switch (value.runtimeType) {
@@ -35,15 +40,19 @@ dynamic serializeParameter(dynamic value) {
       return dateTimeRangeToString(value as DateTimeRange);
     case LatLng:
       return (value as LatLng).serialize();
+    case Color:
+      return (value as Color).toCssString();
     case FFPlace:
       return placeToString(value as FFPlace);
+    case FFUploadedFile:
+      return uploadedFileToString(value as FFUploadedFile);
   }
 
   if (value is DocumentReference) {
     return value.path;
   }
 
-  if (value is Built) {
+  if (value is FirestoreRecord) {
     return (value as dynamic).reference.path;
   }
 
@@ -63,7 +72,7 @@ String serializeParameterData(Map<String, dynamic> parameterData) => jsonEncode(
 
 /// DESERIALIZATION HELPERS
 
-DateTimeRange dateTimeRangeFromString(String dateTimeRangeStr) {
+DateTimeRange? dateTimeRangeFromString(String dateTimeRangeStr) {
   final pieces = dateTimeRangeStr.split('|');
   if (pieces.length != 2) {
     return null;
@@ -74,7 +83,7 @@ DateTimeRange dateTimeRangeFromString(String dateTimeRangeStr) {
   );
 }
 
-LatLng latLngFromString(String latLngStr) {
+LatLng? latLngFromString(String latLngStr) {
   final pieces = latLngStr.split(',');
   if (pieces.length != 2) {
     return null;
@@ -109,7 +118,10 @@ FFPlace placeFromString(String placeStr) {
   );
 }
 
-T getParameter<T>(Map<String, dynamic> data, String paramName) {
+FFUploadedFile uploadedFileFromString(String uploadedFileStr) =>
+    FFUploadedFile.deserialize(uploadedFileStr);
+
+T? getParameter<T>(Map<String, dynamic> data, String paramName) {
   try {
     if (!data.containsKey(paramName)) {
       return null;
@@ -126,8 +138,12 @@ T getParameter<T>(Map<String, dynamic> data, String paramName) {
         return dateTimeRangeFromString(param) as T;
       case LatLng:
         return latLngFromString(param) as T;
+      case Color:
+        return fromCssColor(param) as T;
       case FFPlace:
         return placeFromString(param) as T;
+      case FFUploadedFile:
+        return uploadedFileFromString(param) as T;
     }
     if (param is String) {
       return FirebaseFirestore.instance.doc(param) as T;
@@ -139,15 +155,18 @@ T getParameter<T>(Map<String, dynamic> data, String paramName) {
   }
 }
 
-Future<T> getDocumentParameter<T>(
-    Map<String, dynamic> data, String paramName, Serializer<T> serializer) {
+Future<T?> getDocumentParameter<T>(
+  Map<String, dynamic> data,
+  String paramName,
+  RecordBuilder<T> recordBuilder,
+) {
   if (!data.containsKey(paramName)) {
     return Future.value(null);
   }
   return FirebaseFirestore.instance
       .doc(data[paramName])
       .get()
-      .then((s) => serializers.deserializeWith(serializer, serializedData(s)));
+      .then((s) => recordBuilder(s));
 }
 
 /// END DESERIALIZATION HELPERS
